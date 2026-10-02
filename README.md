@@ -2,7 +2,7 @@
   <h1>🦈 Megalodon</h1>
   <p><strong>Production-Grade Self-Hosted API Security, Traffic Management, Host Visibility & Cyber-Defense Platform</strong></p>
   <p>
-    <a href="https://github.com/megalodon-security/megalodon/actions"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status"></a>
+    <a href="https://github.com/emadam2006/Megalodon/actions"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="License"></a>
     <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/Python-3.12%2B-blue.svg" alt="Python"></a>
     <a href="https://react.dev"><img src="https://img.shields.io/badge/React-18-cyan.svg" alt="React"></a>
@@ -25,6 +25,18 @@ Unlike typical cloud API management tools that operate detached from the host op
 - **Embedded Observability**: High-frequency metrics, percentile latency curves ($p_{50}$, $p_{95}$, $p_{99}$), traffic composition charts, and infrastructure health built directly into the native web panel.
 - **Host Network Awareness**: Automatically correlates host kernel interfaces, listening sockets, active connections, and OS processes with incoming traffic.
 - **Dynamic Policy Enforcement**: Subnet CIDR IP filtering, automated rate limiting (Token Bucket, Sliding Window, Fixed Window), condition-chaining rule engine, and automated malicious IP quarantine.
+
+---
+
+## 🔒 Security Best Practices (Read Before Deployment)
+
+> [!IMPORTANT]
+> Megalodon is a security and network defense gateway. Before exposing any service publicly, apply these essential production hardening rules:
+
+1. **Change the Default Secret Key**: Immediately update `MEGALODON_SECRET_KEY` in `.env` with a high-entropy 32+ character random string before public deployment.
+2. **Update Database Credentials**: Change `POSTGRES_PASSWORD` from the default placeholder to a strong, random passphrase.
+3. **Restrict Network Agent Token**: Ensure `NETWORK_AGENT_TOKEN` is kept secret and randomized to prevent unauthorized telemetry injection.
+4. **Use TLS Termination**: Place a reverse proxy with valid TLS certificates (such as Caddy, Nginx, or Cloudflare) in front of port `3000` for public-facing deployments.
 
 ---
 
@@ -119,8 +131,8 @@ Unlike typical cloud API management tools that operate detached from the host op
 
 ### 1. Clone & Configure
 ```bash
-git clone https://github.com/megalodon-security/megalodon.git
-cd megalodon
+git clone https://github.com/emadam2006/Megalodon.git
+cd Megalodon
 
 # Initialize your environment configuration
 cp .env.example .env
@@ -282,15 +294,6 @@ PYTHONPATH=backend:network-agent pytest tests/ -v
 cd frontend
 npm run build
 ```
-
----
-
-## 🔒 Security Best Practices
-
-1. **Change the Default Secret Key**: Immediately update `MEGALODON_SECRET_KEY` in `.env` before public deployment.
-2. **Update Database Credentials**: Change `POSTGRES_PASSWORD` to a strong random passphrase.
-3. **Restrict Network Agent Token**: Ensure `NETWORK_AGENT_TOKEN` is kept secret to prevent unauthorized telemetry injection.
-4. **Use TLS Termination**: Place a reverse proxy with valid TLS certificates (such as Caddy, Nginx, or Cloudflare) in front of port `3000` for public-facing deployments.
 
 ---
 
