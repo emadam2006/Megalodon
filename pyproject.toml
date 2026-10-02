@@ -1,0 +1,20 @@
+[tool.ruff]
+target-version = "py312"
+line-length = 200
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = [
+    "E501",   # line length
+    "E741",   # ambiguous variable name
+    "B008",   # function call in argument default (Depends)
+    "BLE001", # blind exception catch
+    "S110",   # try-except-pass
+    "S112",   # try-except-continue
+    "RUF059", # unused unpacked variable
+    "F841",   # local variable is assigned to but never used
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

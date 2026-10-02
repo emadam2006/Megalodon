@@ -1,0 +1,92 @@
+name: Megalodon CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-backend-tests:
+    name: Backend Lint & Pytest Suite
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install -r network-agent/requirements.txt
+          pip install -r cli/requirements.txt
+
+      - name: Run Ruff Lint
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: Run Pytest Suite
+        run: |
+          PYTHONPATH=backend:network-agent:cli pytest -v tests/
+
+  frontend-build:
+    name: Frontend Build & Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package.json
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Build production bundle
+        run: |
+          cd frontend
+          npm run build
+
+  docker-build:
+    name: Docker Images Build Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Megalodon Backend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: false
+          tags: megalodon-backend:test
+
+      - name: Build Megalodon Network Agent Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./network-agent
+          push: false
+          tags: megalodon-agent:test
+
+      - name: Build Megalodon Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: false
+          tags: megalodon-frontend:test
