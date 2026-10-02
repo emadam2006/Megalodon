@@ -1,8 +1,4 @@
-# Megalodon
-Open-source infrastructure security platform that discovers, monitors, analyzes, and protects your network and API traffic in real time.
-
-
- <div align="center">
+<div align="center">
   <h1>🦈 Megalodon</h1>
   <p><strong>Production-Grade Self-Hosted API Security, Traffic Management, Host Visibility & Cyber-Defense Platform</strong></p>
   <p>
